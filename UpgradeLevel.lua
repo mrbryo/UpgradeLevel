@@ -238,8 +238,12 @@ function UpgradeLevel:OnInitialize()
     options.args.profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
     
     -- Setup AceConfig
-    LibStub("AceConfig-3.0"):RegisterOptionsTable("UpgradeLevel", options, {"upgradelevel", "ul"})
+    LibStub("AceConfig-3.0"):RegisterOptionsTable("UpgradeLevel", options)
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("UpgradeLevel", "Upgrade Level")
+    
+    -- Register slash commands using AceConsole
+    self:RegisterChatCommand("upgradelevel", "ChatCommand")
+    self:RegisterChatCommand("ul", "ChatCommand")
 end
 
 function UpgradeLevel:OnEnable()
@@ -262,15 +266,15 @@ end
 
 -- Slash command handlers
 function UpgradeLevel:ChatCommand(input)
-    print("ChatCommand called with input: ", tostring(input)) -- Debug print
     if not input or input:trim() == "" then
-        -- Open config panel
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame) -- Called twice to ensure it opens properly
-    elseif input:lower() == "config" or input:lower() == "options" then
-        -- Open config panel
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        -- Open config panel - use AceConfigDialog method for compatibility
+        LibStub("AceConfigDialog-3.0"):Open("UpgradeLevel", "general")
+    elseif input:lower() == "profile" then
+        -- Open config panel - use AceConfigDialog method for compatibility
+        LibStub("AceConfigDialog-3.0"):Open("UpgradeLevel", "profiles")
+    elseif input:lower() == "about" then
+        -- Open config panel - use AceConfigDialog method for compatibility
+        LibStub("AceConfigDialog-3.0"):Open("UpgradeLevel", "about")
     elseif input:lower() == "status" then
         -- Show addon status
         self:Print(("Show Max Level: %s"):format(self.db.profile.showMaxLevel and "On" or "Off"))
@@ -280,10 +284,10 @@ function UpgradeLevel:ChatCommand(input)
     else
         -- Show help
         self:Print("UpgradeLevel Commands:")
-        self:Print("/ul or /upgradelevel - Open configuration panel")
-        self:Print("/ul config - Open configuration panel")
-        self:Print("/ul toggle - Toggle addon on/off")
-        self:Print("/ul status - Show current settings")
+        self:Print("/ul or /upgradelevel - Open General Settings")
+        self:Print("/ul profile - Open Profile Settings")
+        self:Print("/ul about - Show About Information")
+        self:Print("/ul status - Show Current Settings")
     end
 end
 
