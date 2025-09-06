@@ -225,6 +225,12 @@ local options = {
                     end,
                     order = 5,
                 },
+                image = {
+                    type = "description",
+                    name = "|TInterface\\AddOns\\UpgradeLevel\\upgradeLevel-updated.png:238:520|t",
+                    width = "full",
+                    order = 6,
+                },
             },
         },
     },
