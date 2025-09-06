@@ -4,16 +4,16 @@
 local addonName, addonTable = ...
 
 -- Create AceAddon
-local UpgradeLevel = LibStub("AceAddon-3.0"):NewAddon("UpgradeLevel", "AceEvent-3.0")
+local UpgradeLevel = LibStub("AceAddon-3.0"):NewAddon("UpgradeLevel", "AceEvent-3.0", "AceConsole-3.0")
 
 -- Default database values
 local defaults = {
     profile = {
-        enabled = true,
         showMaxLevel = true,
         colorCode = "00ff00", -- Green color for max level text
-        showOnlyUpgradeable = false,
         troubleMode = false,
+        showUpgradeText = true,
+        -- showUpgradeLevel = true,
     },
     global = {
         items = {},
@@ -24,8 +24,10 @@ local defaults = {
 UpgradeLevel.vars = {
     isDevMode = true,
     maxUpgradeLevel = 975,
+    maxUpgradeRank = 1,
     upgrades = {
         [970] = {
+            rank = 6,
             id = "explorer",
             name = "Explorer",
             activities = "Delve Tiers 1-2\nNormal Dungeons\nOutdoor Activities, Patch 11.2 Campaign Quests",
@@ -36,6 +38,7 @@ UpgradeLevel.vars = {
             crests = {}
         },
         [971] = {
+            rank = 5,
             id = "adventurer",
             name = "Adventurer",
             activities = "Delve Tiers 3-4\nHeroic Dungeons",
@@ -48,6 +51,7 @@ UpgradeLevel.vars = {
             }
         },
         [972] = {
+            rank = 4,
             id = "veteran",
             name = "Veteran",
             activities = "Weekly World Events\nDelve Tiers 5-6\nDelve Tiers 1-4 Great Vault\nHeroic Difficulty Dungeons Great Vault\nLFR Difficulty Raid Bosses",
@@ -61,6 +65,7 @@ UpgradeLevel.vars = {
             }
         },
         [973] = {
+            rank = 3,
             id = "champion",
             name = "Champion",
             activities = "World Bosses\nDelve Tiers 7-11\nDelve Tiers 5-6 Great Vault\nMythic Difficulty Dungeons\nMythic Difficulty Dungeons Great Vault\nMythic+ Keystone 2-6 Dungeons\nNormal Difficulty Raid Bosses",
@@ -74,6 +79,7 @@ UpgradeLevel.vars = {
             }
         },
         [974] = {
+            rank = 2,
             id = "hero",
             name = "Hero",
             activities = "Delver's Bounty Maps Tier 8\nDelves Tiers 7-11 Great Vault\nMythic+ Keystone 7-10 Dungeons\nMythic+ Keystone 2-9 Dungeons Great Vault\nHeroic Difficulty Raid Bosses",
@@ -87,6 +93,7 @@ UpgradeLevel.vars = {
             }
         },
         [975] = {
+            rank = 1,
             id = "myth",
             name = "Myth",
             activities = "Mythic+ Keystone 10+ Dungeons Great Vault\nMythic Difficulty Raid Bosses",
@@ -101,9 +108,138 @@ UpgradeLevel.vars = {
     },
 }
 
+-- AceConfig options table
+local options = {
+    name = "Upgrade Level",
+    handler = UpgradeLevel,
+    type = "group",
+    args = {
+        about = {
+            name = "About",
+            type = "group",
+            order = 0,
+            args = {
+                description = {
+                    type = "description",
+                    name = "Upgrade Level adds item level information to armor and weapon tooltips.",
+                    order = 1,
+                },
+                support = {
+                    type = "description",
+                    name = "\nTo support this addon, please use on of the following methods:",
+                    order = 2,
+                },
+                patreon = {
+                    type = "input",
+                    get = function() return "https://www.patreon.com/Bryo" end,
+                    set = function() end,
+                    name = "Patreon: ",
+                    width = "full",
+                    order = 3,
+                },
+                buymeacoffee = {
+                    type = "input",
+                    get = function() return "https://www.buymeacoffee.com/mrbryo" end,
+                    set = function() end,
+                    name = "Buy me a Coffee: ",
+                    width = "full",
+                    order = 4,
+                },
+                github = {
+                    type = "input",
+                    get = function() return "https://github.com/mrbryo/UpgradeLevel/issues" end,
+                    set = function() end,
+                    name = "To report issues or request features, please visit the GitHub repository:",
+                    width = "full",
+                    order = 5,
+                },
+            },
+        },
+        general = {
+            name = "General Settings",
+            type = "group",
+            order = 1,
+            args = {
+                showMaxLevel = {
+                    type = "toggle",
+                    name = "Show Max Level",
+                    desc = "Show maximum item level information in tooltips.",
+                    get = function(info)
+                        return UpgradeLevel.db.profile.showMaxLevel or false
+                    end,
+                    set = function(info, val) UpgradeLevel.db.profile.showMaxLevel = val end,
+                    order = 2,
+                },
+                -- don't like how this looks in the tool tip, commenting out for now
+                -- showUpgradeLevel = {
+                --     type = "toggle",
+                --     name = "Show Upgrade Level",
+                --     desc = "Show upgrade level as a number in tooltips.",
+                --     get = function(info) return UpgradeLevel.db.profile.showUpgradeLevel or false end,
+                --     set = function(info, val) UpgradeLevel.db.profile.showUpgradeLevel = val end,
+                --     order = 3,
+                -- },
+                showUpgradeText = {
+                    type = "toggle",
+                    name = "Show Upgrade Text",
+                    desc = "Show upgrade level as descriptive text in tooltips.",
+                    get = function(info) return UpgradeLevel.db.profile.showUpgradeText or false end,
+                    set = function(info, val) UpgradeLevel.db.profile.showUpgradeText = val end,
+                    order = 4,
+                },
+                colorCode = {
+                    type = "color",
+                    name = "Color",
+                    desc = "Color for max level and upgrade text",
+                    get = function(info) 
+                        local hex = UpgradeLevel.db.profile.colorCode or "00ff00"
+                        -- Convert hex to RGB values (0-1 range)
+                        local r = tonumber(hex:sub(1,2), 16) / 255
+                        local g = tonumber(hex:sub(3,4), 16) / 255  
+                        local b = tonumber(hex:sub(5,6), 16) / 255
+                        return r, g, b, 1
+                    end,
+                    set = function(info, r, g, b, a)
+                        -- Convert RGB values (0-1 range) back to hex
+                        local hex = string.format("%02x%02x%02x", 
+                            math.floor(r * 255 + 0.5), 
+                            math.floor(g * 255 + 0.5), 
+                            math.floor(b * 255 + 0.5))
+                        UpgradeLevel.db.profile.colorCode = hex
+                    end,
+                    order = 4,
+                },
+                troubleMode = {
+                    type = "toggle",
+                    name = "Trouble Shooting Mode",
+                    desc = "Enable debug/trouble mode for additional logging to the saved variables file for issue submission.",
+                    get = function(info) return UpgradeLevel.db.profile.troubleMode or false end,
+                    set = function(info, val) 
+                        UpgradeLevel.db.profile.troubleMode = val
+                        
+                        -- clear out item tables if trouble mode is off
+                        if UpgradeLevel.db.profile.troubleMode == false then
+                            UpgradeLevel.db.global.items = {}
+                            UpgradeLevel.db.global.linktoitem = {}
+                        end
+                    end,
+                    order = 5,
+                },
+            },
+        },
+    },
+}
+
 function UpgradeLevel:OnInitialize()
     -- Initialize AceDB with defaults
     self.db = LibStub("AceDB-3.0"):New("UpgradeLevelDB", defaults, true)
+    
+    -- Add profiles to options table now that db exists
+    options.args.profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
+    
+    -- Setup AceConfig
+    LibStub("AceConfig-3.0"):RegisterOptionsTable("UpgradeLevel", options, {"upgradelevel", "ul"})
+    self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("UpgradeLevel", "Upgrade Level")
 end
 
 function UpgradeLevel:OnEnable()
@@ -124,12 +260,34 @@ function UpgradeLevel:SetupTooltipHooks()
     hooksecurefunc(ItemRefTooltip, "SetHyperlink", OnTooltipSetItem)
 end
 
-function UpgradeLevel:AddUpgradeInfo(tooltip)
-    -- Check if addon is enabled
-    if not self.db.profile.enabled then
-        return
+-- Slash command handlers
+function UpgradeLevel:ChatCommand(input)
+    print("ChatCommand called with input: ", tostring(input)) -- Debug print
+    if not input or input:trim() == "" then
+        -- Open config panel
+        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame) -- Called twice to ensure it opens properly
+    elseif input:lower() == "config" or input:lower() == "options" then
+        -- Open config panel
+        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+    elseif input:lower() == "status" then
+        -- Show addon status
+        self:Print(("Show Max Level: %s"):format(self.db.profile.showMaxLevel and "On" or "Off"))
+        self:Print(("Show Upgrade Text: %s"):format(self.db.profile.showUpgradeText and "On" or "Off"))
+        self:Print(("Color Code: %s"):format(self.db.profile.colorCode))
+        self:Print(("Trouble Shooting Mode: %s"):format(self.db.profile.troubleMode and "On" or "Off"))
+    else
+        -- Show help
+        self:Print("UpgradeLevel Commands:")
+        self:Print("/ul or /upgradelevel - Open configuration panel")
+        self:Print("/ul config - Open configuration panel")
+        self:Print("/ul toggle - Toggle addon on/off")
+        self:Print("/ul status - Show current settings")
     end
+end
 
+function UpgradeLevel:AddUpgradeInfo(tooltip)
     -- get tooltips item link
     local _, itemLink = tooltip:GetItem()
 
@@ -172,9 +330,9 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
 
     -- if itemName not found, return to end function call
     if not itemName then return end
-    
+
     -- Only show for armor and weapons
-    if itemType == "Armor" or itemType == "Weapon" then
+    if (itemType == "Armor" or itemType == "Weapon") and (self.db.profile.showMaxLevel == true or self.db.profile.showUpgradeText == true or self.db.profile.showUpgradeLevel == true) then
         -- get the item upgrade information
         local itemUpgradeInfo = C_Item.GetItemUpgradeInfo(itemLink)
         
@@ -205,29 +363,38 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                     local text = line:GetText()
 
                     -- Look for "Item Level XXX" pattern
-                    if text:match("Item Level %d+") and itemUpgradeInfo.maxItemLevel > 0 then
+                    if text:match("Item Level %d+") and itemUpgradeInfo.maxItemLevel > 0 and self.db.profile.showMaxLevel == true then
                         local colorCode = self.db.profile.colorCode or "00ff00"
                         local newText = text .. " |cff" .. colorCode .. "(Max: " .. tostring(itemUpgradeInfo.maxItemLevel) .. ")|r"
                         line:SetText(newText)
                         done.itemLevel = true
-                    elseif text:match("Upgrade Level:") then
+                    elseif text:match("Upgrade Level:") and (self.db.profile.showUpgradeText == true or self.db.profile.showUpgradeLevel == true) then
                         local colorCode = self.db.profile.colorCode or "00ff00"
 
                         -- build text
                         local referenceText = ""
                         local itemRankData = UpgradeLevel.vars.upgrades[itemUpgradeInfo.trackStringID]
                         local loopCount = 0
+
+                        -- append numeric level if enabled
+                        -- if self.db.profile.showUpgradeLevel == true then
+                        --     referenceText = ("(%d/%d) "):format(itemRankData.rank, UpgradeLevel.vars.maxUpgradeRank)
+                        -- end
+
                         for i = (itemUpgradeInfo.trackStringID + 1), UpgradeLevel.vars.maxUpgradeLevel do
                             local rankData = UpgradeLevel.vars.upgrades[i]
                             if rankData then
                                 -- append to reference text
-                                referenceText = ("%s > %s"):format(referenceText, rankData.name)
+                                if self.db.profile.showUpgradeText == true then
+                                    referenceText = ("%s > %s"):format(referenceText, rankData.name)
+                                end
 
                                 -- increment loop count
                                 loopCount = loopCount + 1
 
                                 -- Limit to next two ranks for brevity
                                 if loopCount > 2 then
+                                    referenceText = referenceText .. " > ..."
                                     break
                                 end
                             end
