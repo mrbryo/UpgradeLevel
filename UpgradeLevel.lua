@@ -32,8 +32,8 @@ UpgradeLevel.vars = {
         [970] = {
             rank = 6,
             id = "explorer",
-            name = "Explorer",
-            activities = "Delve Tiers 1-2\nNormal Dungeons\nOutdoor Activities, Patch 11.2 Campaign Quests",
+            name = L["Explorer"],
+            activities = L["Delve Tiers 1-2\nNormal Dungeons\nOutdoor Activities, Patch 11.2 Campaign Quests"],
             levels = {
                 min = 642,
                 max = 665,
@@ -43,8 +43,8 @@ UpgradeLevel.vars = {
         [971] = {
             rank = 5,
             id = "adventurer",
-            name = "Adventurer",
-            activities = "Delve Tiers 3-4\nHeroic Dungeons",
+            name = L["Adventurer"],
+            activities = L["Delve Tiers 3-4\nHeroic Dungeons"],
             levels = {
                 min = 655,
                 max = 678,
@@ -56,8 +56,8 @@ UpgradeLevel.vars = {
         [972] = {
             rank = 4,
             id = "veteran",
-            name = "Veteran",
-            activities = "Weekly World Events\nDelve Tiers 5-6\nDelve Tiers 1-4 Great Vault\nHeroic Difficulty Dungeons Great Vault\nLFR Difficulty Raid Bosses",
+            name = L["Veteran"],
+            activities = L["Weekly World Events\nDelve Tiers 5-6\nDelve Tiers 1-4 Great Vault\nHeroic Difficulty Dungeons Great Vault\nLFR Difficulty Raid Bosses"],
             levels = {
                 min = 668,
                 max = 691,
@@ -70,8 +70,8 @@ UpgradeLevel.vars = {
         [973] = {
             rank = 3,
             id = "champion",
-            name = "Champion",
-            activities = "World Bosses\nDelve Tiers 7-11\nDelve Tiers 5-6 Great Vault\nMythic Difficulty Dungeons\nMythic Difficulty Dungeons Great Vault\nMythic+ Keystone 2-6 Dungeons\nNormal Difficulty Raid Bosses",
+            name = L["Champion"],
+            activities = L["World Bosses\nDelve Tiers 7-11\nDelve Tiers 5-6 Great Vault\nMythic Difficulty Dungeons\nMythic Difficulty Dungeons Great Vault\nMythic+ Keystone 2-6 Dungeons\nNormal Difficulty Raid Bosses"],
             levels = {
                 min = 681,
                 max = 704,
@@ -84,8 +84,8 @@ UpgradeLevel.vars = {
         [974] = {
             rank = 2,
             id = "hero",
-            name = "Hero",
-            activities = "Delver's Bounty Maps Tier 8\nDelves Tiers 7-11 Great Vault\nMythic+ Keystone 7-10 Dungeons\nMythic+ Keystone 2-9 Dungeons Great Vault\nHeroic Difficulty Raid Bosses",
+            name = L["Hero"],
+            activities = L["Delver's Bounty Maps Tier 8\nDelves Tiers 7-11 Great Vault\nMythic+ Keystone 7-10 Dungeons\nMythic+ Keystone 2-9 Dungeons Great Vault\nHeroic Difficulty Raid Bosses"],
             levels = {
                 min = 694,
                 max = 710,
@@ -98,8 +98,8 @@ UpgradeLevel.vars = {
         [975] = {
             rank = 1,
             id = "myth",
-            name = "Myth",
-            activities = "Mythic+ Keystone 10+ Dungeons Great Vault\nMythic Difficulty Raid Bosses",
+            name = L["Myth"],
+            activities = L["Mythic+ Keystone 10+ Dungeons Great Vault\nMythic Difficulty Raid Bosses"],
             levels = {
                 min = 707,
                 max = 723,
@@ -118,25 +118,25 @@ local options = {
     type = "group",
     args = {
         about = {
-            name = "About",
+            name = L["About"],
             type = "group",
             order = 0,
             args = {
                 description = {
                     type = "description",
-                    name = "Upgrade Level adds two pieces of information to armor and weapon tooltips.\n\n1) Max upgrade item level is added to the current item level line.\n\n2) On the Upgrade Level line, text is added to remind you of higher ranks above the item's current rank.\n\nI had to keep going back to Wowhead to look this up...so I made this addon to help me out. Enjoy!\n\n",
+                    name = L["Upgrade Level adds item level information to armor and weapon tooltips."],
                     order = 1,
                 },
                 support = {
                     type = "description",
-                    name = "\nTo support this addon, please use on of the following methods:",
+                    name = L["To support this addon, please use on of the following methods:"],
                     order = 2,
                 },
                 patreon = {
                     type = "input",
                     get = function() return "https://www.patreon.com/Bryo" end,
                     set = function() end,
-                    name = "Patreon: ",
+                    name = L["Patreon: "],
                     width = "full",
                     order = 3,
                 },
@@ -144,7 +144,7 @@ local options = {
                     type = "input",
                     get = function() return "https://www.buymeacoffee.com/mrbryo" end,
                     set = function() end,
-                    name = "Buy me a Coffee: ",
+                    name = L["Buy me a Coffee: "],
                     width = "full",
                     order = 4,
                 },
@@ -152,21 +152,21 @@ local options = {
                     type = "input",
                     get = function() return "https://github.com/mrbryo/UpgradeLevel/issues" end,
                     set = function() end,
-                    name = "To report issues or request features, please visit the GitHub repository:",
+                    name = L["To report issues or request features, please visit the GitHub repository:"],
                     width = "full",
                     order = 5,
                 },
             },
         },
         general = {
-            name = "General Settings",
+            name = L["General Settings"],
             type = "group",
             order = 1,
             args = {
                 showMaxLevel = {
                     type = "toggle",
-                    name = "Show Max Level",
-                    desc = "Show maximum item level information in tooltips.",
+                    name = L["Show Max Level"],
+                    desc = L["Show maximum item level information in tooltips."],
                     get = function(info)
                         return UpgradeLevel.db.profile.showMaxLevel or false
                     end,
@@ -184,16 +184,16 @@ local options = {
                 -- },
                 showUpgradeText = {
                     type = "toggle",
-                    name = "Show Upgrade Text",
-                    desc = "Show upgrade level as descriptive text in tooltips.",
+                    name = L["Show Upgrade Text"],
+                    desc = L["Show upgrade level as descriptive text in tooltips."],
                     get = function(info) return UpgradeLevel.db.profile.showUpgradeText or false end,
                     set = function(info, val) UpgradeLevel.db.profile.showUpgradeText = val end,
                     order = 3,
                 },
                 colorCode = {
                     type = "color",
-                    name = "Color",
-                    desc = "Color for max level and upgrade text",
+                    name = L["Color"],
+                    desc = L["Color for max level and upgrade text"],
                     get = function(info) 
                         local hex = UpgradeLevel.db.profile.colorCode or "00ff00"
                         -- Convert hex to RGB values (0-1 range)
@@ -214,8 +214,8 @@ local options = {
                 },
                 troubleMode = {
                     type = "toggle",
-                    name = "Trouble Shooting Mode",
-                    desc = "Enable debug/trouble mode for additional logging to the saved variables file for issue submission.",
+                    name = L["Trouble Shooting Mode"],
+                    desc = L["Enable debug/trouble mode for additional logging to the saved variables file for issue submission."],
                     get = function(info) return UpgradeLevel.db.profile.troubleMode or false end,
                     set = function(info, val) 
                         UpgradeLevel.db.profile.troubleMode = val
@@ -286,17 +286,17 @@ function UpgradeLevel:ChatCommand(input)
         LibStub("AceConfigDialog-3.0"):Open("UpgradeLevel", "about")
     elseif input:lower() == "status" then
         -- Show addon status
-        self:Print(("Show Max Level: %s"):format(self.db.profile.showMaxLevel and "On" or "Off"))
-        self:Print(("Show Upgrade Text: %s"):format(self.db.profile.showUpgradeText and "On" or "Off"))
-        self:Print(("Color Code: %s"):format(self.db.profile.colorCode))
-        self:Print(("Trouble Shooting Mode: %s"):format(self.db.profile.troubleMode and "On" or "Off"))
+        self:Print(L["Show Max Level: %s"]:format(self.db.profile.showMaxLevel and L["On"] or L["Off"]))
+        self:Print(L["Show Upgrade Text: %s"]:format(self.db.profile.showUpgradeText and L["On"] or L["Off"]))
+        self:Print(L["Color Code: %s"]:format(self.db.profile.colorCode))
+        self:Print(L["Trouble Shooting Mode: %s"]:format(self.db.profile.troubleMode and L["On"] or L["Off"]))
     else
         -- Show help
-        self:Print("UpgradeLevel Commands:")
-        self:Print("/ul or /upgradelevel - Open General Settings")
-        self:Print("/ul profile - Open Profile Settings")
-        self:Print("/ul about - Show About Information")
-        self:Print("/ul status - Show Current Settings")
+        self:Print(L["UpgradeLevel Commands:"])
+        self:Print(L["/ul or /upgradelevel - Open configuration panel"])
+        self:Print(L["/ul config - Open configuration panel"])
+        self:Print(L["/ul toggle - Toggle addon on/off"])
+        self:Print(L["/ul status - Show current settings"])
     end
 end
 
@@ -378,7 +378,7 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                     -- Look for "Item Level XXX" pattern
                     if text:match("Item Level %d+") and itemUpgradeInfo.maxItemLevel > 0 and self.db.profile.showMaxLevel == true then
                         local colorCode = self.db.profile.colorCode or "00ff00"
-                        local newText = text .. " |cff" .. colorCode .. "(Max: " .. tostring(itemUpgradeInfo.maxItemLevel) .. ")|r"
+                        local newText = text .. " |cff" .. colorCode .. "(" .. L["Max"] .. ": " .. tostring(itemUpgradeInfo.maxItemLevel) .. ")|r"
                         line:SetText(newText)
                         done.itemLevel = true
                     elseif text:match("Upgrade Level:") and (self.db.profile.showUpgradeText == true or self.db.profile.showUpgradeLevel == true) then

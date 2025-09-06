@@ -42,5 +42,18 @@ L["On"] = "On"
 L["Off"] = "Off"
 L["Max"] = "Max"
 
--- ChatCommand debug
-L["ChatCommand called with input: "] = "ChatCommand called with input: "
+-- Upgrade Ranks
+L["Explorer"] = "Explorer"
+L["Adventurer"] = "Adventurer"
+L["Veteran"] = "Veteran"
+L["Champion"] = "Champion"
+L["Hero"] = "Hero"
+L["Myth"] = "Myth"
+
+-- Activities
+L["Delve Tiers 1-2\nNormal Dungeons\nOutdoor Activities, Patch 11.2 Campaign Quests"] = "Delve Tiers 1-2\nNormal Dungeons\nOutdoor Activities, Patch 11.2 Campaign Quests"
+L["Delve Tiers 3-4\nHeroic Dungeons"] = "Delve Tiers 3-4\nHeroic Dungeons"
+L["Weekly World Events\nDelve Tiers 5-6\nDelve Tiers 1-4 Great Vault\nHeroic Difficulty Dungeons Great Vault\nLFR Difficulty Raid Bosses"] = "Weekly World Events\nDelve Tiers 5-6\nDelve Tiers 1-4 Great Vault\nHeroic Difficulty Dungeons Great Vault\nLFR Difficulty Raid Bosses"
+L["World Bosses\nDelve Tiers 7-11\nDelve Tiers 5-6 Great Vault\nMythic Difficulty Dungeons\nMythic Difficulty Dungeons Great Vault\nMythic+ Keystone 2-6 Dungeons\nNormal Difficulty Raid Bosses"] = "World Bosses\nDelve Tiers 7-11\nDelve Tiers 5-6 Great Vault\nMythic Difficulty Dungeons\nMythic Difficulty Dungeons Great Vault\nMythic+ Keystone 2-6 Dungeons\nNormal Difficulty Raid Bosses"
+L["Delver's Bounty Maps Tier 8\nDelves Tiers 7-11 Great Vault\nMythic+ Keystone 7-10 Dungeons\nMythic+ Keystone 2-9 Dungeons Great Vault\nHeroic Difficulty Raid Bosses"] = "Delver's Bounty Maps Tier 8\nDelves Tiers 7-11 Great Vault\nMythic+ Keystone 7-10 Dungeons\nMythic+ Keystone 2-9 Dungeons Great Vault\nHeroic Difficulty Raid Bosses"
+L["Mythic+ Keystone 10+ Dungeons Great Vault\nMythic Difficulty Raid Bosses"] = "Mythic+ Keystone 10+ Dungeons Great Vault\nMythic Difficulty Raid Bosses"
