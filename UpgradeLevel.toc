@@ -1,0 +1,8 @@
+## Interface: 110200
+## Title: UpgradeLevel
+## Notes: Adds upgrade level information to armor and weapon tooltips.
+## Author: mrbryo
+## Dependencies: Ace3
+## SavedVariables: UpgradeLevelDB
+
+UpgradeLevel.lua
