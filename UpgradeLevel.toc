@@ -5,4 +5,5 @@
 ## Dependencies: Ace3
 ## SavedVariables: UpgradeLevelDB
 
+locale\enUS.lua
 UpgradeLevel.lua

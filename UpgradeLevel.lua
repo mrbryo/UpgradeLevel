@@ -3,6 +3,9 @@
 
 local addonName, addonTable = ...
 
+-- Initialize AceLocale
+local L = LibStub("AceLocale-3.0"):GetLocale("UpgradeLevel", true)
+
 -- Create AceAddon
 local UpgradeLevel = LibStub("AceAddon-3.0"):NewAddon("UpgradeLevel", "AceEvent-3.0", "AceConsole-3.0")
 
@@ -185,7 +188,7 @@ local options = {
                     desc = "Show upgrade level as descriptive text in tooltips.",
                     get = function(info) return UpgradeLevel.db.profile.showUpgradeText or false end,
                     set = function(info, val) UpgradeLevel.db.profile.showUpgradeText = val end,
-                    order = 4,
+                    order = 3,
                 },
                 colorCode = {
                     type = "color",
