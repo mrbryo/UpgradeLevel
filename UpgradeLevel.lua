@@ -121,7 +121,7 @@ local options = {
             args = {
                 description = {
                     type = "description",
-                    name = "Upgrade Level adds item level information to armor and weapon tooltips.",
+                    name = "Upgrade Level adds two pieces of information to armor and weapon tooltips.\n\n1) Max upgrade item level is added to the current item level line.\n\n2) On the Upgrade Level line, text is added to remind you of higher ranks above the item's current rank.\n\nI had to keep going back to Wowhead to look this up...so I made this addon to help me out. Enjoy!\n\n",
                     order = 1,
                 },
                 support = {
