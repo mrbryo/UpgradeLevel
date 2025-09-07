@@ -129,7 +129,7 @@ local options = {
                 },
                 support = {
                     type = "description",
-                    name = L["To support this addon, please use on of the following methods:"],
+                    name = "\n" .. L["To support this addon, please use on of the following methods:"],
                     order = 2,
                 },
                 patreon = {
@@ -155,6 +155,14 @@ local options = {
                     name = L["To report issues or request features, please visit the GitHub repository:"],
                     width = "full",
                     order = 5,
+                },
+                locale = {
+                    type = "input",
+                    get = function() return "https://legacy.curseforge.com/wow/addons/upgradelevel/localization" end,
+                    set = function() end,
+                    name = L["Assist with translations or add a new language:"],
+                    width = "full",
+                    order = 6,
                 },
             },
         },
@@ -292,11 +300,12 @@ function UpgradeLevel:ChatCommand(input)
         self:Print(L["Trouble Shooting Mode: %s"]:format(self.db.profile.troubleMode and L["On"] or L["Off"]))
     else
         -- Show help
-        self:Print(L["UpgradeLevel Commands:"])
-        self:Print(L["/ul or /upgradelevel - Open configuration panel"])
-        self:Print(L["/ul config - Open configuration panel"])
-        self:Print(L["/ul toggle - Toggle addon on/off"])
-        self:Print(L["/ul status - Show current settings"])
+        self:Print(L["Upgrade Level Commands:"])
+        self:Print(L["/ul or /upgradelevel - Open General Settings in Options"])
+        self:Print(L["/ul general - Open General Settings in Options"])
+        self:Print(L["/ul profiles - Open Profiles in Options"])
+        self:Print(L["/ul about - Open About in Options"])
+        self:Print(L["/ul status - Show current settings in main chat window."])
     end
 end
 
