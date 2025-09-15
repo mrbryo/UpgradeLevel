@@ -355,9 +355,15 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
 
     -- Only show for armor and weapons
     if (itemType == "Armor" or itemType == "Weapon") and (self.db.profile.showMaxLevel == true or self.db.profile.showUpgradeText == true or self.db.profile.showUpgradeLevel == true) then
-        -- get the item upgrade information
+        --[[ get the item upgrade information
+            currentLevel: 1 to the item's maxLevel; example 1 to 8
+            maxLevel: the maximum upgrade level for this item; example 8
+            maxItemLevel: the maximum item level for this item at its max upgrade level; example 723
+            trackString: the string identifier for the upgrade path; example Champion
+            trackStringID: the numeric identifier for the upgrade path; example 973
+        ]]
         local itemUpgradeInfo = C_Item.GetItemUpgradeInfo(itemLink)
-        
+
         -- add details
         if self.db.profile.troubleMode == true then 
             self.db.global.items[itemID].currentLevel = itemUpgradeInfo and itemUpgradeInfo.currentLevel or 0
@@ -368,6 +374,23 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
         end
 
         if itemUpgradeInfo then
+            -- check for nil or missing values in itemUpgradeInfo
+            if not itemUpgradeInfo.currentLevel then
+                itemUpgradeInfo.currentLevel = 0
+            end
+            if not itemUpgradeInfo.maxLevel then
+                itemUpgradeInfo.maxLevel = 0
+            end
+            if not itemUpgradeInfo.maxItemLevel then
+                itemUpgradeInfo.maxItemLevel = 0
+            end
+            if not itemUpgradeInfo.trackString then
+                itemUpgradeInfo.trackString = "No Data"
+            end
+            if not itemUpgradeInfo.trackStringID then
+                itemUpgradeInfo.trackStringID = 0
+            end
+
             -- track additions
             local done = {
                 itemLevel = false,
@@ -384,12 +407,14 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                     -- get the line text
                     local text = line:GetText()
 
-                    -- Look for "Item Level XXX" pattern
+                    -- look for "Item Level XXX" pattern
                     if text:match("Item Level %d+") and itemUpgradeInfo.maxItemLevel > 0 and self.db.profile.showMaxLevel == true then
                         local colorCode = self.db.profile.colorCode or "00ff00"
                         local newText = text .. " |cff" .. colorCode .. "(" .. L["Max"] .. ": " .. tostring(itemUpgradeInfo.maxItemLevel) .. ")|r"
                         line:SetText(newText)
                         done.itemLevel = true
+
+                    -- look for "Upgrade Level:" pattern
                     elseif text:match("Upgrade Level:") and (self.db.profile.showUpgradeText == true or self.db.profile.showUpgradeLevel == true) then
                         local colorCode = self.db.profile.colorCode or "00ff00"
 
@@ -403,21 +428,27 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                         --     referenceText = ("(%d/%d) "):format(itemRankData.rank, UpgradeLevel.vars.maxUpgradeRank)
                         -- end
 
-                        for i = (itemUpgradeInfo.trackStringID + 1), UpgradeLevel.vars.maxUpgradeLevel do
-                            local rankData = UpgradeLevel.vars.upgrades[i]
-                            if rankData then
-                                -- append to reference text
-                                if self.db.profile.showUpgradeText == true then
-                                    referenceText = ("%s > %s"):format(referenceText, rankData.name)
-                                end
+                        if itemUpgradeInfo.trackStringID == 0 then
+                            if self.db.profile.showUpgradeText == true then
+                                referenceText = itemUpgradeInfo.trackString
+                            end
+                        else
+                            for i = (itemUpgradeInfo.trackStringID + 1), UpgradeLevel.vars.maxUpgradeLevel do
+                                local rankData = UpgradeLevel.vars.upgrades[i]
+                                if rankData then
+                                    -- append to reference text
+                                    if self.db.profile.showUpgradeText == true then
+                                        referenceText = ("%s > %s"):format(referenceText, rankData.name)
+                                    end
 
-                                -- increment loop count
-                                loopCount = loopCount + 1
+                                    -- increment loop count
+                                    loopCount = loopCount + 1
 
-                                -- Limit to next two ranks for brevity
-                                if loopCount > 2 then
-                                    referenceText = referenceText .. " > ..."
-                                    break
+                                    -- Limit to next two ranks for brevity
+                                    if loopCount > 2 then
+                                        referenceText = referenceText .. " > ..."
+                                        break
+                                    end
                                 end
                             end
                         end

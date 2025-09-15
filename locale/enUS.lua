@@ -4,9 +4,16 @@ local L = AceLocale:NewLocale("UpgradeLevel", "enUS", true)
 
 if not L then return end
 
+-- following line is replaced when packaged through curseforge using their localization tool
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat", handle-unlocalized="english")@
+
+--@do-not-package@ 
+--[[ leaving all for development purposes, export from curseforge ]]
+
 -- General
 L["General Settings"] = "General Settings"
 L["About"] = "About"
+L["No Data"] = "No Data"
 
 -- Settings
 L["Show Max Level"] = "Show Max Level"
@@ -59,4 +66,4 @@ L["World Bosses\nDelve Tiers 7-11\nDelve Tiers 5-6 Great Vault\nMythic Difficult
 L["Delver's Bounty Maps Tier 8\nDelves Tiers 7-11 Great Vault\nMythic+ Keystone 7-10 Dungeons\nMythic+ Keystone 2-9 Dungeons Great Vault\nHeroic Difficulty Raid Bosses"] = "Delver's Bounty Maps Tier 8\nDelves Tiers 7-11 Great Vault\nMythic+ Keystone 7-10 Dungeons\nMythic+ Keystone 2-9 Dungeons Great Vault\nHeroic Difficulty Raid Bosses"
 L["Mythic+ Keystone 10+ Dungeons Great Vault\nMythic Difficulty Raid Bosses"] = "Mythic+ Keystone 10+ Dungeons Great Vault\nMythic Difficulty Raid Bosses"
 
-
+--@end-do-not-package@
