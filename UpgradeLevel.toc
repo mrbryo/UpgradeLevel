@@ -1,4 +1,4 @@
-## Interface: 110200
+## Interface: 120000
 ## Title: UpgradeLevel
 ## Notes: Adds upgrade level information to armor and weapon tooltips.
 ## Author: mrbryo
