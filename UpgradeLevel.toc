@@ -3,8 +3,13 @@
 ## Notes: Adds upgrade level information to armor and weapon tooltips.
 ## Author: mrbryo
 ## Version: 0.5-beta
+## X-Curse-Project-ID: 1342466
+## X-Curse-Project-Name: Upgrade Level
 ## Dependencies: Ace3
 ## SavedVariables: UpgradeLevelDB
+## X-MrBryo-Repository: https://github.com/mrbryo/UpgradeLevel
+## IconTexture: Interface\UpgradeLevel\icons\UpgradeLevel_TocIcon.bmp
+## Category-enUS: User Interface
 
 locale\enUS.lua
 UpgradeLevel.lua

@@ -322,6 +322,20 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
     -- fetch item info using C_Item.GetItemInfo, returned value 2 is also itemLink, no need to override what is fetched from tooltip
     local itemName, _, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, ItemTexture, sellPrice, classID, subclassID, bindType, expansionID, setID, isCraftingReagent = C_Item.GetItemInfo(itemLink)
 
+    --@debug@
+    --[[
+        Nope this GetItemStats doesn't return anything I need...
+    ]]
+    -- get the item stats
+    -- local statTbl = C_Item.GetItemStats(itemLink)
+    -- if statTbl then
+    --     for statID, value in pairs(statTbl) do
+    --         -- print statID and value to saved variables for debugging
+    --         self:Print("StatID: " .. tostring(statID) .. " Value: " .. tostring(value))
+    --     end
+    -- end
+    --@end-debug@
+
     -- add to db if not already present
     if UpgradeLevel.db.profile.troubleMode == true then
         if itemID and not UpgradeLevel.db.global.items[itemID] then
