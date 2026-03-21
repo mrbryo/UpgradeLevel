@@ -474,10 +474,14 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
 
                     -- If both modifications are done, exit the loop early
                     if done.itemLevel and done.upgradeLevel then
-                        tooltip:Show()
-                        return
+                        break
                     end
                 end
+            end
+            
+            -- Recalculate tooltip size after any modifications
+            if done.itemLevel or done.upgradeLevel then
+                tooltip:Show()
             end
         end
     end
