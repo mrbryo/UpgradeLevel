@@ -1,7 +1,7 @@
 -- UpgradeLevel.lua
 -- Adds upgrade level information to armor and weapon tooltips
 
-local addonName, addonTable = ...
+local addonName, app = ...
 
 -- Initialize AceLocale
 local L = LibStub("AceLocale-3.0"):GetLocale("UpgradeLevel", true)
@@ -407,61 +407,64 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                     -- get the line text
                     local text = line:GetText()
 
-                    -- look for "Item Level XXX" pattern
-                    if text:match("Item Level %d+") and itemUpgradeInfo.maxItemLevel > 0 and UpgradeLevel.db.profile.showMaxLevel == true then
-                        local colorCode = UpgradeLevel.db.profile.colorCode or "00ff00"
-                        local newText = text .. " |cff" .. colorCode .. "(" .. L["Max"] .. ": " .. tostring(itemUpgradeInfo.maxItemLevel) .. ")|r"
-                        line:SetText(newText)
-                        done.itemLevel = true
+                    -- check for secret
+                    if not app.WOWAPI.issecretvalue(text) then
+                        -- look for "Item Level XXX" pattern
+                        if text:match("Item Level %d+") and itemUpgradeInfo.maxItemLevel > 0 and UpgradeLevel.db.profile.showMaxLevel == true then
+                            local colorCode = UpgradeLevel.db.profile.colorCode or "00ff00"
+                            local newText = text .. " |cff" .. colorCode .. "(" .. L["Max"] .. ": " .. tostring(itemUpgradeInfo.maxItemLevel) .. ")|r"
+                            line:SetText(newText)
+                            done.itemLevel = true
 
-                    -- look for "Upgrade Level:" pattern
-                    elseif text:match("Upgrade Level:") and (UpgradeLevel.db.profile.showUpgradeText == true or UpgradeLevel.db.profile.showUpgradeLevel == true) then
-                        local colorCode = UpgradeLevel.db.profile.colorCode or "00ff00"
+                        -- look for "Upgrade Level:" pattern
+                        elseif text:match("Upgrade Level:") and (UpgradeLevel.db.profile.showUpgradeText == true or UpgradeLevel.db.profile.showUpgradeLevel == true) then
+                            local colorCode = UpgradeLevel.db.profile.colorCode or "00ff00"
 
-                        -- build text
-                        local referenceText = ""
-                        local itemRankData = UpgradeLevel.vars.upgrades[itemUpgradeInfo.trackStringID]
-                        local loopCount = 0
+                            -- build text
+                            local referenceText = ""
+                            local itemRankData = UpgradeLevel.vars.upgrades[itemUpgradeInfo.trackStringID]
+                            local loopCount = 0
 
-                        -- append numeric level if enabled
-                        -- if UpgradeLevel.db.profile.showUpgradeLevel == true then
-                        --     referenceText = ("(%d/%d) "):format(itemRankData.rank, UpgradeLevel.vars.maxUpgradeRank)
-                        -- end
+                            -- append numeric level if enabled
+                            -- if UpgradeLevel.db.profile.showUpgradeLevel == true then
+                            --     referenceText = ("(%d/%d) "):format(itemRankData.rank, UpgradeLevel.vars.maxUpgradeRank)
+                            -- end
 
-                        if itemUpgradeInfo.trackStringID == 0 then
-                            if UpgradeLevel.db.profile.showUpgradeText == true then
-                                referenceText = itemUpgradeInfo.trackString
-                            end
-                        else
-                            for i = (itemUpgradeInfo.trackStringID + 1), UpgradeLevel.vars.maxUpgradeLevel do
-                                local rankData = UpgradeLevel.vars.upgrades[i]
-                                if rankData then
-                                    -- append to reference text
-                                    if UpgradeLevel.db.profile.showUpgradeText == true then
-                                        referenceText = ("%s > %s"):format(referenceText, rankData.name)
-                                    end
+                            if itemUpgradeInfo.trackStringID == 0 then
+                                if UpgradeLevel.db.profile.showUpgradeText == true then
+                                    referenceText = itemUpgradeInfo.trackString
+                                end
+                            else
+                                for i = (itemUpgradeInfo.trackStringID + 1), UpgradeLevel.vars.maxUpgradeLevel do
+                                    local rankData = UpgradeLevel.vars.upgrades[i]
+                                    if rankData then
+                                        -- append to reference text
+                                        if UpgradeLevel.db.profile.showUpgradeText == true then
+                                            referenceText = ("%s > %s"):format(referenceText, rankData.name)
+                                        end
 
-                                    -- increment loop count
-                                    loopCount = loopCount + 1
+                                        -- increment loop count
+                                        loopCount = loopCount + 1
 
-                                    -- Limit to next two ranks for brevity
-                                    if loopCount > 2 then
-                                        referenceText = referenceText .. " > ..."
-                                        break
+                                        -- Limit to next two ranks for brevity
+                                        if loopCount > 2 then
+                                            referenceText = referenceText .. " > ..."
+                                            break
+                                        end
                                     end
                                 end
                             end
+
+                            local newText = text .. " |cff" .. colorCode .. referenceText .. "|r"
+                            line:SetText(newText)
+                            done.upgradeLevel = true
                         end
 
-                        local newText = text .. " |cff" .. colorCode .. referenceText .. "|r"
-                        line:SetText(newText)
-                        done.upgradeLevel = true
-                    end
-
-                    -- If both modifications are done, exit the loop early
-                    if done.itemLevel and done.upgradeLevel then
-                        tooltip:Show()
-                        return
+                        -- If both modifications are done, exit the loop early
+                        if done.itemLevel and done.upgradeLevel then
+                            tooltip:Show()
+                            return
+                        end
                     end
                 end
             end
