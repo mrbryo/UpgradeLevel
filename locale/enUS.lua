@@ -66,4 +66,13 @@ L["World Bosses\nDelve Tiers 7-11\nDelve Tiers 5-6 Great Vault\nMythic Difficult
 L["Delver's Bounty Maps Tier 8\nDelves Tiers 7-11 Great Vault\nMythic+ Keystone 7-10 Dungeons\nMythic+ Keystone 2-9 Dungeons Great Vault\nHeroic Difficulty Raid Bosses"] = "Delver's Bounty Maps Tier 8\nDelves Tiers 7-11 Great Vault\nMythic+ Keystone 7-10 Dungeons\nMythic+ Keystone 2-9 Dungeons Great Vault\nHeroic Difficulty Raid Bosses"
 L["Mythic+ Keystone 10+ Dungeons Great Vault\nMythic Difficulty Raid Bosses"] = "Mythic+ Keystone 10+ Dungeons Great Vault\nMythic Difficulty Raid Bosses"
 
+-- Something Weird Blizzard Introduced???
+L["ToDebugString"] = "UpgradeLevel:ToDebugString"
+
+-- Game Version Detections
+L["No Data found for Season: "] = "No Data found for Season: "
+L[" for Expansion: "] = " for Expansion: "
+L[" at Game Version: "] = " at Game Version: "
+L["New Expansion Detected! Until updated, addon will have limited functionality."] = "New Expansion Detected! Until updated, addon will have limited functionality."
+
 --@end-do-not-package@
