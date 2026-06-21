@@ -5,7 +5,7 @@ This addon displays the upgrade level of armor and weapons directly in their too
 
 ---
 
-- Author: YourName
-- Version: 1.0.0
-- Interface: 100007
+- Author: Bryo
+- Version: 0.7-beta
+- Interface: 120007
 

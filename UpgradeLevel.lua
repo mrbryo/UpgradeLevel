@@ -377,13 +377,17 @@ end
 -- Add Data to Tooltips
 function UpgradeLevel:AddUpgradeInfo(tooltip)
     -- exist if season not found
-    if not UpgradeLevel.vars.validSeason then return end
+    if not UpgradeLevel.vars.validSeason then
+        return
+    end
 
     -- get tooltips item link
     local _, itemLink = tooltip:GetItem()
 
     -- if itemLink not found, return to end function call
-    if not itemLink then return end
+    if not itemLink then
+        return
+    end
 
     -- fetch the itemID from the itemLink
     local itemID = C_Item.GetItemIDForItemInfo(itemLink)
@@ -450,7 +454,9 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
     end
 
     -- if itemName not found, return to end function call
-    if not itemName then return end
+    if not itemName then
+        return
+    end
 
     -- Only show for armor and weapons
     if (itemType == "Armor" or itemType == "Weapon") and (self.db.profile.showMaxLevel == true or self.db.profile.showUpgradeText == true or self.db.profile.showUpgradeLevel == true) then
@@ -573,6 +579,7 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                             line:SetText(newText)
                             done.upgradeLevel = true
                         end
+                    end
 
                     -- If both modifications are done, exit the loop early
                     if done.itemLevel and done.upgradeLevel then
