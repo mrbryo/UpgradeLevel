@@ -1,8 +1,8 @@
-## Interface: 120001, 120005
+## Interface: 120007
 ## Title: UpgradeLevel
 ## Notes: Adds upgrade level information to armor and weapon tooltips.
 ## Author: mrbryo
-## Version: 0.6-beta
+## Version: 0.7-beta
 ## X-Curse-Project-ID: 1342466
 ## X-Curse-Project-Name: Upgrade Level
 ## Dependencies: Ace3
