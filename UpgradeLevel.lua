@@ -1,7 +1,7 @@
 -- UpgradeLevel.lua
 -- Adds upgrade level information to armor and weapon tooltips
 
-local addonName, addonTable = ...
+local addonName, app = ...
 
 -- Initialize AceLocale
 local L = LibStub("AceLocale-3.0"):GetLocale("UpgradeLevel", true)
@@ -513,16 +513,18 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                         end
                     end
 
-                    -- look for "Item Level XXX" pattern
-                    if text:match("Item Level %d+") and maxItemLevel > 0 and self.db.profile.showMaxLevel == true then
-                        local colorCode = self.db.profile.colorCode or "00ff00"
-                        local newText = text .. " |cff" .. colorCode .. "(" .. L["Max"] .. ": " .. tostring(maxItemLevel) .. ")|r"
-                        line:SetText(newText)
-                        done.itemLevel = true
+                    -- check for secret
+                    if not app.WOWAPI.issecretvalue(text) then
+                        -- look for "Item Level XXX" pattern
+                        if text:match("Item Level %d+") and maxItemLevel > 0 and self.db.profile.showMaxLevel == true then
+                            local colorCode = self.db.profile.colorCode or "00ff00"
+                            local newText = text .. " |cff" .. colorCode .. "(" .. L["Max"] .. ": " .. tostring(maxItemLevel) .. ")|r"
+                            line:SetText(newText)
+                            done.itemLevel = true
 
-                    -- look for "Upgrade Level:" pattern
-                    elseif text:match("Upgrade Level:") and (self.db.profile.showUpgradeText == true or self.db.profile.showUpgradeLevel == true) then
-                        local colorCode = self.db.profile.colorCode or "00ff00"
+                        -- look for "Upgrade Level:" pattern
+                        elseif text:match("Upgrade Level:") and (self.db.profile.showUpgradeText == true or self.db.profile.showUpgradeLevel == true) then
+                            local colorCode = self.db.profile.colorCode or "00ff00"
 
                         -- build text
                         local referenceText = ""
@@ -555,22 +557,22 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                                         referenceText = ("%s > %s"):format(referenceText, rankData.name)
                                     end
 
-                                    -- increment loop count
-                                    loopCount = loopCount + 1
+                                        -- increment loop count
+                                        loopCount = loopCount + 1
 
-                                    -- Limit to next two ranks for brevity
-                                    if loopCount > 2 then
-                                        referenceText = referenceText .. " > ..."
-                                        break
+                                        -- Limit to next two ranks for brevity
+                                        if loopCount > 2 then
+                                            referenceText = referenceText .. " > ..."
+                                            break
+                                        end
                                     end
                                 end
                             end
-                        end
 
-                        local newText = text .. " |cff" .. colorCode .. referenceText .. "|r"
-                        line:SetText(newText)
-                        done.upgradeLevel = true
-                    end
+                            local newText = text .. " |cff" .. colorCode .. referenceText .. "|r"
+                            line:SetText(newText)
+                            done.upgradeLevel = true
+                        end
 
                     -- If both modifications are done, exit the loop early
                     if done.itemLevel and done.upgradeLevel then
