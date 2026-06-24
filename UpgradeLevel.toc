@@ -2,7 +2,7 @@
 ## Title: UpgradeLevel
 ## Notes: Adds upgrade level information to armor and weapon tooltips.
 ## Author: mrbryo
-## Version: 0.7.2-beta
+## Version: 0.7.3-beta
 ## X-Curse-Project-ID: 1342466
 ## X-Curse-Project-Name: Upgrade Level
 ## Dependencies: Ace3
