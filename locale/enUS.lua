@@ -13,7 +13,7 @@ local L = setmetatable({}, {
 ns.L = L
 
 -- following line is replaced when packaged through curseforge using their localization tool so do not comment out when checking in otherwise the first translation will be
--- @localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat", handle-unlocalized="english")@
+@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat", handle-unlocalized="english")@
 
 --@do-not-package@ 
 --[[ leaving all for development purposes, export from curseforge ]]
