@@ -1,0 +1,10 @@
+tag add24eddae117ab81cf7f29704f39b620997688e 0.7.3-beta
+Author:	Brian <1635119+mrbryo@users.noreply.github.com>
+Date:	Wed Jun 24 11:56:49 2026 -0700
+
+commit 99364167ce2969a23091287a26120b8f65f49d59
+Author: Brian <1635119+mrbryo@users.noreply.github.com>
+Date:   Wed Jun 24 11:56:07 2026 -0700
+
+    Curseforge localization with return characters causing issues. One more translation to remove I missed earlier today. Also seems like I have to remove the comment marker on the curse replacement string so the first translation is not commented out. Version bump as well.
+
