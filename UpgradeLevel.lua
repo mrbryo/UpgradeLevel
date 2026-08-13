@@ -1,10 +1,7 @@
 -- UpgradeLevel.lua
 -- Adds upgrade level information to armor and weapon tooltips
 
-local addonName, app = ...
-
--- Initialize AceLocale
-local L = LibStub("AceLocale-3.0"):GetLocale("UpgradeLevel", true)
+local addonName, ns = ...
 
 -- Create AceAddon
 local UpgradeLevel = LibStub("AceAddon-3.0"):NewAddon("UpgradeLevel", "AceEvent-3.0", "AceConsole-3.0", "AceHook-3.0")
@@ -21,45 +18,49 @@ local defaults = {
     global = {
         items = {},
         linktoitem = {},
+        gameBranch = 0,
+        gameVersion = 0,
+        seasonID = 0,
+        validSeason = false
     },
 }
 
 UpgradeLevel.vars = {
-    expID = 0,
-    gameVersion = 0,
-    seasonID = 0,
+    -- gameBranch = 0,
+    -- gameVersion = 0,
+    -- seasonID = 0,
     validSeason = false,
     isDevMode = true,
     upgrades = {
         [970] = {
             rank = 6,
             id = "explorer",
-            name = L["Explorer"]
+            name = ns.L["Explorer"]
         },
         [971] = {
             rank = 5,
             id = "adventurer",
-            name = L["Adventurer"],
+            name = ns.L["Adventurer"],
         },
         [972] = {
             rank = 4,
             id = "veteran",
-            name = L["Veteran"],
+            name = ns.L["Veteran"],
         },
         [973] = {
             rank = 3,
             id = "champion",
-            name = L["Champion"],
+            name = ns.L["Champion"],
         },
         [974] = {
             rank = 2,
             id = "hero",
-            name = L["Hero"],
+            name = ns.L["Hero"],
         },
         [975] = {
             rank = 1,
             id = "myth",
-            name = L["Myth"],
+            name = ns.L["Myth"],
         },
     },
 }
@@ -73,6 +74,47 @@ UpgradeLevel.vars.expData = {
         -- Only Midnight Supported for Now
         [LE_EXPANSION_MIDNIGHT] = {
             -- Season
+            -- 18 is Midnight Season 2
+            [18] = {
+                maxUpgradeLevel = 975,
+                maxUpgradeRank = 1,
+                ranks = {
+                    -- adventurer
+                    [971] = {
+                        levels = {
+                            min = 266,
+                            max = 276,
+                        },
+                    },
+                    -- veteran
+                    [972] = {
+                        levels = {
+                            min = 279,
+                            max = 289,
+                        },
+                    },
+                    -- champion
+                    [973] = {
+                        levels = {
+                            min = 292,
+                            max = 302,
+                        },
+                    },
+                    -- hero
+                    [974] = {
+                        levels = {
+                            min = 305,
+                            max = 315,
+                        },
+                    },
+                    -- myth
+                    [975] = {
+                        levels = {
+                            min = 318,
+                            max = 344,
+                        },
+                    },}
+            },
             -- 17 is Midnight Season 1, therefore, 18 would be Midnight Season 2, and so on. Doesn't seem Blizzard has constants for these, so using raw numbers for now.
             [17] = {
                 maxUpgradeLevel = 975,
@@ -137,25 +179,25 @@ function UpgradeLevel:OnInitialize()
         type = "group",
         args = {
             about = {
-                name = L["About"],
+                name = ns.L["About"],
                 type = "group",
-                order = 0,
+                order = 10,
                 args = {
                     description = {
                         type = "description",
-                        name = L["Upgrade Level adds item level information to armor and weapon tooltips."],
+                        name = ns.L["Upgrade Level adds item level information to armor and weapon tooltips."],
                         order = 1,
                     },
                     support = {
                         type = "description",
-                        name = "\n" .. L["To support this addon, please use on of the following methods:"],
+                        name = "\n" .. ns.L["To support this addon, please use on of the following methods:"],
                         order = 2,
                     },
                     patreon = {
                         type = "input",
                         get = function() return "https://www.patreon.com/Bryo" end,
                         set = function() end,
-                        name = L["Patreon: "],
+                        name = ns.L["Patreon: "],
                         width = "full",
                         order = 3,
                     },
@@ -163,7 +205,7 @@ function UpgradeLevel:OnInitialize()
                         type = "input",
                         get = function() return "https://www.buymeacoffee.com/mrbryo" end,
                         set = function() end,
-                        name = L["Buy me a Coffee: "],
+                        name = ns.L["Buy me a Coffee: "],
                         width = "full",
                         order = 4,
                     },
@@ -171,7 +213,7 @@ function UpgradeLevel:OnInitialize()
                         type = "input",
                         get = function() return "https://github.com/mrbryo/UpgradeLevel/issues" end,
                         set = function() end,
-                        name = L["To report issues or request features, please visit the GitHub repository:"],
+                        name = ns.L["To report issues or request features, please visit the GitHub repository:"],
                         width = "full",
                         order = 5,
                     },
@@ -179,21 +221,21 @@ function UpgradeLevel:OnInitialize()
                         type = "input",
                         get = function() return "https://legacy.curseforge.com/wow/addons/upgradelevel/localization" end,
                         set = function() end,
-                        name = L["Assist with translations or add a new language:"],
+                        name = ns.L["Assist with translations or add a new language:"],
                         width = "full",
                         order = 6,
                     },
                 },
             },
             general = {
-                name = L["General Settings"],
+                name = ns.L["General Settings"],
                 type = "group",
-                order = 1,
+                order = 20,
                 args = {
                     showMaxLevel = {
                         type = "toggle",
-                        name = L["Show Max Level"],
-                        desc = L["Show maximum item level information in tooltips."],
+                        name = ns.L["Show Max Level"],
+                        desc = ns.L["Show maximum item level information in tooltips."],
                         get = function(info)
                             return UpgradeLevel.db.profile.showMaxLevel or false
                         end,
@@ -211,16 +253,16 @@ function UpgradeLevel:OnInitialize()
                     -- },
                     showUpgradeText = {
                         type = "toggle",
-                        name = L["Show Upgrade Text"],
-                        desc = L["Show upgrade level as descriptive text in tooltips."],
+                        name = ns.L["Show Upgrade Text"],
+                        desc = ns.L["Show upgrade level as descriptive text in tooltips."],
                         get = function(info) return UpgradeLevel.db.profile.showUpgradeText or false end,
                         set = function(info, val) UpgradeLevel.db.profile.showUpgradeText = val end,
                         order = 3,
                     },
                     colorCode = {
                         type = "color",
-                        name = L["Color"],
-                        desc = L["Color for max level and upgrade text"],
+                        name = ns.L["Color"],
+                        desc = ns.L["Color for max level and upgrade text"],
                         get = function(info) 
                             local hex = UpgradeLevel.db.profile.colorCode or "00ff00"
                             -- Convert hex to RGB values (0-1 range)
@@ -241,12 +283,11 @@ function UpgradeLevel:OnInitialize()
                     },
                     troubleMode = {
                         type = "toggle",
-                        name = L["Trouble Shooting Mode"],
-                        desc = L["Enable debug/trouble mode for additional logging to the saved variables file for issue submission."],
+                        name = ns.L["Trouble Shooting Mode"],
+                        desc = ns.L["Enable debug/trouble mode for additional logging to the saved variables file for issue submission."],
                         get = function(info) return UpgradeLevel.db.profile.troubleMode or false end,
                         set = function(info, val) 
                             UpgradeLevel.db.profile.troubleMode = val
-                            
                             -- clear out item tables if trouble mode is off
                             if UpgradeLevel.db.profile.troubleMode == false then
                                 UpgradeLevel.db.global.items = {}
@@ -263,16 +304,118 @@ function UpgradeLevel:OnInitialize()
                     },
                 },
             },
+            thankyou = {
+                name = ns.L["Thank You!"],
+                type = "group",
+                order = 30,
+                args = {
+                    thanks1 = {
+                        type = "description",
+                        name = ns.L["On Wowhead, iMX3 is the author of an article which has lots of gear information on it. With out it I'm not sure where I would find the details I need for the addon with out having to write a bunch of additional code to extrapolate over time the min and max values for gear."],
+                        order = 10
+                    },
+                    thanks1Link = {
+                        type = "input",
+                        get = function() return "https://www.wowhead.com/guide/midnight/item-level-gear-upgrades-dawncrests" end,
+                        set = function () end,
+                        name = ns.L["Midnight Guide for Item Levels"],
+                        width = "full",
+                        order = 11
+                    },
+                    thanks1AuthorLink = {
+                        type = "input",
+                        get = function() return "https://www.wowhead.com/author/iMX3" end,
+                        set = function() end,
+                        name = ns.L["iMX3 Author Link on Wowhead"],
+                        width = "full",
+                        order = 12
+                    }
+                }
+            },
+            --@debug@
+            troubleshoot = {
+                name = ns.L["Troubleshoot"],
+                type = "group",
+                order = 100,
+                args = {
+                    disclaimer = {
+                        type = "description",
+                        name = "Note: English only on this tab. If any other developers join which speak/read something other than English then happy to add translation functionality.\n\nvar = value read from addon variablen\nglobal = value read from WoW global variable because addon variable was nil\nfunc = value used from a WoW function call because addon variable was nil",
+                        order = 0,
+                    },
+                    wowProjectId = {
+                        type = "input",
+                        get = function()
+                            local outstr = "%s (%s)"
+                            if self.db.global.gameBranch == nil then
+                                return (outstr):format(WOW_PROJECT_ID, "global")
+                            else
+                                return (outstr):format(self.db.global.gameBranch, "var")
+                            end
+                        end,
+                        set = function() end,
+                        name = ns.L["Game Branch (Project)"],
+                        width = "full",
+                        order = 10
+                    },
+                    infoWowProjectId = {
+                        type = "description",
+                        name = ("Game Version ID's; Retain/Mainline: %d; Classic: %d"):format(WOW_PROJECT_MAINLINE, WOW_PROJECT_CLASSIC),
+                        order = 11
+                    },
+                    expansionId = {
+                        type = "input",
+                        get = function()
+                            local outstr = "%s (%s)"
+                            if self.db.global.gameVersion == nil then
+                                return (outstr):format(LE_EXPANSION_LEVEL_CURRENT, "global")
+                            else
+                                return (outstr):format(self.db.global.gameVersion, "var")
+                            end
+                        end,
+                        set = function() end,
+                        name = ns.L["Expansion ID"],
+                        width = "full",
+                        order = 20
+                    },
+                    infoExpansionId = {
+                        type = "description",
+                        name = ("Expansion ID's; Midnight: %d; War Within: %d"):format(LE_EXPANSION_MIDNIGHT, LE_EXPANSION_WAR_WITHIN),
+                        order = 21
+                    },
+                    curSeasonId = {
+                        type = "input",
+                        get = function()
+                            local outstr = "%s (%s)"
+                            if self.db.global.seasonID == nil then
+                                return (outstr):format(C_MythicPlus.GetCurrentSeason(), "func")
+                            else
+                                return (outstr):format(self.db.global.seasonID, "var")
+                            end
+                        end,
+                        set = function() end,
+                        name = ns.L["Current Season ID"],
+                        width = "full",
+                        order = 30
+                    },
+                    infoCurSeasonId = {
+                        type = "description",
+                        name = "Midnight; S1: 17, S2: 18",
+                        order = 31
+                    }
+                }
+            }
+            --@end-debug@
         },
     }
-    
+
     -- Add profiles to options table now that db exists
     options.args.profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
-    
+
     -- Setup AceConfig
     LibStub("AceConfig-3.0"):RegisterOptionsTable("UpgradeLevel", options)
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("UpgradeLevel", "Upgrade Level")
-    
+
     -- Register slash commands using AceConsole
     self:RegisterChatCommand("upgradelevel", "ChatCommand")
     self:RegisterChatCommand("ul", "ChatCommand")
@@ -280,56 +423,67 @@ end
 
 -- Waiting for Map Info Update to get Game Info
 function UpgradeLevel:OnMapInfoReceived()
+    --@debug@
     -- for debugging
     -- self:Print("Map Info Received - Begins...")
+    --@end-debug@
 
     -- Unregister the event since we only need to do this once on initialization; also ensures we have the necessary game info to proceed with addon setup.
     self:UnregisterEvent("CHALLENGE_MODE_MAPS_UPDATE")
-    
-    -- Get Expansion Branch
-    self.vars.expID = WOW_PROJECT_ID
+
+    -- Get Game Branch
+    self.db.global.gameBranch = WOW_PROJECT_ID
 
     -- Get Expansion Level
-    self.vars.gameVersion = LE_EXPANSION_LEVEL_CURRENT
+    self.db.global.gameVersion = LE_EXPANSION_LEVEL_CURRENT
 
     -- Get Season ID
-    self.vars.seasonID = C_MythicPlus.GetCurrentSeason()
-    
+    self.db.global.seasonID = C_MythicPlus.GetCurrentSeason()
+
     -- Verify Season Exists in our Data
     -- First check the game version exists...this is detecting if running retail or not.
-    if self.vars.expData[self.vars.expID] then
+    if self.vars.expData[self.db.global.gameBranch] then
         -- Next check if the expansion level exists...this is the actual expansion like Midnight.
-        if self.vars.expData[self.vars.expID][self.vars.gameVersion] then
+        if self.vars.expData[self.db.global.gameBranch][self.db.global.gameVersion] then
             -- Finally check if the season exists for the expansion.
-            if self.vars.expData[self.vars.expID][self.vars.gameVersion][self.vars.seasonID] then
+            if self.vars.expData[self.db.global.gameBranch][self.db.global.gameVersion][self.db.global.seasonID] then
                 -- season found so set status variable to true
-                self.vars.validSeason = true
+                self.db.global.validSeason = true
                 -- no message to user since success!
             else
-                self:Print(L["No Data found for Season: "] .. tostring(self.vars.seasonID) .. L[" for Expansion: "] .. tostring(self.vars.expID) .. L[" at Game Version: "] .. tostring(self.vars.gameVersion))
+                self:Print(ns.L["No Data found for Season: "] .. tostring(self.db.global.seasonID) .. ns.L[" for Expansion: "] .. tostring(self.db.global.gameBranch) .. ns.L[" at Game Version: "] .. tostring(self.db.global.gameVersion))
+                self.db.global.validSeason = false
             end
         else
-            self:Print(L["No Data found for Expansion Level: "] .. tostring(self.vars.gameVersion) .. L[" for Expansion: "] .. tostring(self.vars.expID))
+            self:Print(ns.L["No Data found for Expansion Level: "] .. tostring(self.db.global.gameVersion) .. ns.L[" for Expansion: "] .. tostring(self.db.global.gameBranch))
         end
 
     else
-        self:Print(L["New Expansion Detected! Until updated, addon will have limited functionality."])
+        self:Print(ns.L["New Expansion Detected! Until updated, addon will have limited functionality."])
     end
 
+    --@debug@
     -- for debugging
     -- self:Print("Map Info Received - Done")
+    --@end-debug@
 end
 
 -- Addon Enabled Setup
 function UpgradeLevel:OnEnable()
     -- Register events and set up hooks when addon is enabled
     self:SetupTooltipHooks()
+    --@debug@
+    -- self:Print("OnEnable Fired - SetupTooltipHooks triggered!")
+    --@end-debug@
 end
 
 -- Addon Disabled Clean Up
 function UpgradeLevel:OnDisable()
     -- Clean up hooks when addon is disabled
     self:UnhookAll()
+    --@debug@
+    -- self:Print("OnDisable Fired - UnhookAll triggered!")
+    --@end-debug@
 end
 
 -- Setup Command Hooks for Tooltips to trigger AddUpgradeInfo
@@ -338,7 +492,7 @@ function UpgradeLevel:SetupTooltipHooks()
     local function OnTooltipSetItem(tooltip)
         self:AddUpgradeInfo(tooltip)
     end
-    
+
     -- Override the tooltip's methods
     self:SecureHook(GameTooltip, "SetBagItem", OnTooltipSetItem)
     self:SecureHook(GameTooltip, "SetInventoryItem", OnTooltipSetItem)
@@ -359,25 +513,29 @@ function UpgradeLevel:ChatCommand(input)
         LibStub("AceConfigDialog-3.0"):Open("UpgradeLevel", "about")
     elseif input:lower() == "status" then
         -- Show addon status
-        self:Print(L["Show Max Level: %s"]:format(UpgradeLevel.db.profile.showMaxLevel and L["On"] or L["Off"]))
-        self:Print(L["Show Upgrade Text: %s"]:format(UpgradeLevel.db.profile.showUpgradeText and L["On"] or L["Off"]))
-        self:Print(L["Color Code: %s"]:format(UpgradeLevel.db.profile.colorCode))
-        self:Print(L["Trouble Shooting Mode: %s"]:format(UpgradeLevel.db.profile.troubleMode and L["On"] or L["Off"]))
+        self:Print(ns.L["Show Max Level: %s"]:format(UpgradeLevel.db.profile.showMaxLevel and ns.L["On"] or ns.L["Off"]))
+        self:Print(ns.L["Show Upgrade Text: %s"]:format(UpgradeLevel.db.profile.showUpgradeText and ns.L["On"] or ns.L["Off"]))
+        self:Print(ns.L["Color Code: %s"]:format(UpgradeLevel.db.profile.colorCode))
+        self:Print(ns.L["Trouble Shooting Mode: %s"]:format(UpgradeLevel.db.profile.troubleMode and ns.L["On"] or ns.L["Off"]))
     else
         -- Show help
-        self:Print(L["Upgrade Level Commands:"])
-        self:Print(L["/ul or /upgradelevel - Open General Settings in Options"])
-        self:Print(L["/ul general - Open General Settings in Options"])
-        self:Print(L["/ul profiles - Open Profiles in Options"])
-        self:Print(L["/ul about - Open About in Options"])
-        self:Print(L["/ul status - Show current settings in main chat window."])
+        self:Print(ns.L["Upgrade Level Commands:"])
+        self:Print(ns.L["/ul or /upgradelevel - Open General Settings in Options"])
+        self:Print(ns.L["/ul general - Open General Settings in Options"])
+        self:Print(ns.L["/ul profiles - Open Profiles in Options"])
+        self:Print(ns.L["/ul about - Open About in Options"])
+        self:Print(ns.L["/ul status - Show current settings in main chat window."])
     end
 end
 
 -- Add Data to Tooltips
 function UpgradeLevel:AddUpgradeInfo(tooltip)
+    --@debug@
+    -- self:Print("AddUpgradeInfo Triggered")
+    --@ned-debug@
+
     -- exist if season not found
-    if not UpgradeLevel.vars.validSeason then
+    if not self.db.global.validSeason then
         return
     end
 
@@ -455,6 +613,9 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
 
     -- if itemName not found, return to end function call
     if not itemName then
+        --@debug@
+        -- self:Print("Item Name Blank for item %s." .. tostring(itemID))
+        --@end-debug@
         return
     end
 
@@ -468,13 +629,16 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
             trackStringID: the numeric identifier for the upgrade path; example 973
         ]]
         local itemUpgradeInfo = C_Item.GetItemUpgradeInfo(itemLink)
+        --@debug@
+        -- self:Print(("Item Upgrade Info; Name: '%s'; Track String: '%s'"):format(itemName or "No Item Name", itemUpgradeInfo.trackString or "No Track String"))
+        --@end-debug@
 
         -- add details
         if self.db.profile.troubleMode == true then
             self.db.global.items[itemID]["C_Item-GetItemUpgradeInfo"] = itemUpgradeInfo or {}
         end
 
-        if itemUpgradeInfo then
+        if itemUpgradeInfo ~= nil then
             -- check for nil or missing values in itemUpgradeInfo
             if not itemUpgradeInfo.currentLevel then
                 itemUpgradeInfo.currentLevel = 0
@@ -504,7 +668,7 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                 local line = _G[tooltip:GetName() .. "TextLeft" .. i]
 
                 -- get rank data from addon
-                local ranksData = self.vars.expData[self.vars.expID][self.vars.gameVersion][self.vars.seasonID].ranks[itemUpgradeInfo.trackStringID]
+                local ranksData = self.vars.expData[self.db.global.gameBranch][self.db.global.gameVersion][self.db.global.seasonID].ranks[itemUpgradeInfo.trackStringID]
 
                 -- if the line is valid and has text, proceed
                 if line and line:GetText() then
@@ -519,12 +683,18 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                         end
                     end
 
+                    -- get max level, not adjusting this since I'm using it to determine if I should show max level or not; assuming if zero I shouldn't, see item 264629 for example. It says its an Adventurer track but has no upgrade levels...
+                    local maxLevel = itemUpgradeInfo.maxLevel
+
                     -- check for secret
-                    if not app.WOWAPI.issecretvalue(text) then
+                    --@debug@
+                    -- self:Print(("Item '%s' - Show Upgrade Text: %s; Show Max Level: %s"):format(itemName, tostring(self.db.profile.showUpgradeText), tostring(self.db.profile.showUpgradeLevel)))
+                    --@end-debug@
+                    if not ns.WOWAPI.issecretvalue(text) then
                         -- look for "Item Level XXX" pattern
-                        if text:match("Item Level %d+") and maxItemLevel > 0 and self.db.profile.showMaxLevel == true then
+                        if text:match("Item Level %d+") and maxLevel > 0 and maxItemLevel > 0 and self.db.profile.showMaxLevel == true then
                             local colorCode = self.db.profile.colorCode or "00ff00"
-                            local newText = text .. " |cff" .. colorCode .. "(" .. L["Max"] .. ": " .. tostring(maxItemLevel) .. ")|r"
+                            local newText = text .. " |cff" .. colorCode .. "(" .. ns.L["Max"] .. ": " .. tostring(maxItemLevel) .. ")|r"
                             line:SetText(newText)
                             done.itemLevel = true
 
@@ -532,36 +702,39 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                         elseif text:match("Upgrade Level:") and (self.db.profile.showUpgradeText == true or self.db.profile.showUpgradeLevel == true) then
                             local colorCode = self.db.profile.colorCode or "00ff00"
 
-                        -- build text
-                        local referenceText = ""
-                        local itemRankData = self.vars.upgrades[itemUpgradeInfo.trackStringID]
-                        local itemRankLevels = self.vars.expData[self.vars.expID][self.vars.gameVersion][self.vars.seasonID][itemUpgradeInfo.trackStringID]
-                        local loopCount = 0
+                            -- build text
+                            local referenceText = ""
+                            local itemRankData = self.vars.upgrades[itemUpgradeInfo.trackStringID]
+                            local itemRankLevels = self.vars.expData[self.db.global.gameBranch][self.db.global.gameVersion][self.db.global.seasonID][itemUpgradeInfo.trackStringID]
+                            local loopCount = 0
 
-                        -- append numeric level if enabled
-                        -- if self.db.profile.showUpgradeLevel == true then
-                        --     referenceText = ("(%d/%d) "):format(itemRankData.rank, self.vars.maxUpgradeRank)
-                        -- end
+                            -- append numeric level if enabled
+                            -- if self.db.profile.showUpgradeLevel == true then
+                            --     referenceText = ("(%d/%d) "):format(itemRankData.rank, self.vars.maxUpgradeRank)
+                            -- end
 
-                        if itemUpgradeInfo.trackStringID == 0 then
-                            if self.db.profile.showUpgradeText == true then
-                                referenceText = itemUpgradeInfo.trackString
-                            end
-                        else
-                            -- get max upgrade level
-                            local maxUpgradeLevel = self.vars.expData[self.vars.expID][self.vars.gameVersion][self.vars.seasonID].maxUpgradeLevel
+                            if itemUpgradeInfo.trackStringID == 0 then
+                                if self.db.profile.showUpgradeText == true then
+                                    referenceText = itemUpgradeInfo.trackString
+                                end
+                            else
+                                -- get max upgrade level
+                                local maxUpgradeLevel = self.vars.expData[self.db.global.gameBranch][self.db.global.gameVersion][self.db.global.seasonID].maxUpgradeLevel
 
-                            -- for debugging
-                            -- self:Print("Item Upgrade Track String ID: " .. tostring(itemUpgradeInfo.trackStringID) .. "; Max Upgrade Level: " .. tostring(maxUpgradeLevel))
+                                -- for debugging
+                                -- self:Print("Item Upgrade Track String ID: " .. tostring(itemUpgradeInfo.trackStringID) .. "; Max Upgrade Level: " .. tostring(maxUpgradeLevel))
 
-                            -- loop over the range from the track ID + 1 to the max upgrade level, and append the rank names to the reference text
-                            for i = (itemUpgradeInfo.trackStringID + 1), maxUpgradeLevel do
-                                local rankData = self.vars.upgrades[i]
-                                if rankData then
-                                    -- append to reference text
-                                    if self.db.profile.showUpgradeText == true then
-                                        referenceText = ("%s > %s"):format(referenceText, rankData.name)
-                                    end
+                                -- loop over the range from the track ID + 1 to the max upgrade level, and append the rank names to the reference text
+                                for j = (itemUpgradeInfo.trackStringID + 1), maxUpgradeLevel do
+                                    -- get the rank data
+                                    local rankData = self.vars.upgrades[j]
+
+                                    -- if not nil proceed
+                                    if rankData ~= nil then
+                                        -- append to reference text
+                                        if self.db.profile.showUpgradeText == true then
+                                            referenceText = ("%s > %s"):format(referenceText, rankData.name)
+                                        end
 
                                         -- increment loop count
                                         loopCount = loopCount + 1
@@ -576,6 +749,10 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                             end
 
                             local newText = text .. " |cff" .. colorCode .. referenceText .. "|r"
+                            --@debug@
+                            -- self:Print(("Old Text: %s"):format(text))
+                            -- self:Print(("New Text: %s"):format(newText))
+                            --@end-debug@
                             line:SetText(newText)
                             done.upgradeLevel = true
                         end
@@ -587,7 +764,7 @@ function UpgradeLevel:AddUpgradeInfo(tooltip)
                     end
                 end
             end
-            
+
             -- Recalculate tooltip size after any modifications
             if done.itemLevel or done.upgradeLevel then
                 tooltip:Show()

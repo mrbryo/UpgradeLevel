@@ -43,5 +43,5 @@ end
 
 -- System Level APIs
 AssignAPIWrapper("issecretvalue", issecretvalue, function() return false; end);
-    
+
 -- TODO: Add the rest of the blizzard api's here in some future update.
