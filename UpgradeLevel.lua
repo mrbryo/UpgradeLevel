@@ -532,7 +532,7 @@ end
 function UpgradeLevel:AddUpgradeInfo(tooltip)
     --@debug@
     -- self:Print("AddUpgradeInfo Triggered")
-    --@ned-debug@
+    --@end-debug@
 
     -- exist if season not found
     if not self.db.global.validSeason then
