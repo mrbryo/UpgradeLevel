@@ -1,0 +1,9 @@
+package-as: UpgradeLevel
+
+ignore:
+  - .github
+  - .vscode
+  - .luacheckrc
+  - README.md
+  - CLAUDE.md
+  - TooltipDataProcessor.md
