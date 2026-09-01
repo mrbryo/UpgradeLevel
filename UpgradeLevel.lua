@@ -83,28 +83,28 @@ UpgradeLevel.vars.expData = {
                     [971] = {
                         levels = {
                             min = 266,
-                            max = 276,
+                            max = 282,
                         },
                     },
                     -- veteran
                     [972] = {
                         levels = {
                             min = 279,
-                            max = 289,
+                            max = 295,
                         },
                     },
                     -- champion
                     [973] = {
                         levels = {
                             min = 292,
-                            max = 302,
+                            max = 308,
                         },
                     },
                     -- hero
                     [974] = {
                         levels = {
                             min = 305,
-                            max = 315,
+                            max = 321,
                         },
                     },
                     -- myth
